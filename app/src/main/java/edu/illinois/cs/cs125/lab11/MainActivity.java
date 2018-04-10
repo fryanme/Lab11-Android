@@ -5,8 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
+import android.widget.TextView;
+import android.widget.Toast;
+import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -63,17 +66,25 @@ public final class MainActivity extends AppCompatActivity {
         try {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                     Request.Method.GET,
-                    "",
+                    "https://api.iextrading.com/1.0/stock/AAPL/batch?types=quote",
                     null,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(final JSONObject response) {
                             Log.d(TAG, response.toString());
+                            TextView temp = findViewById(R.id.jsonResult);
+                            temp.setText(response.toString());
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(final VolleyError error) {
                             Log.w(TAG, error.toString());
+                            Context context = getApplicationContext();
+                            CharSequence text = "Hello toast!";
+                            int duration = Toast.LENGTH_SHORT;
+
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
                         }
                     });
             requestQueue.add(jsonObjectRequest);
